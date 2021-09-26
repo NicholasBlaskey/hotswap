@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="./wasm_exec.js"></script>
+    <script>
+      fetch("/compile")
+        .then(response => response.text())
+        .then(function(respText) {
+          if (respText !== "") {
+            console.log("Compile error");
+            console.log(respText);
+      
+            const p = document.createElement("pre");
+            p.appendChild(document.createTextNode("Compile error \n\n" + respText));
+            document.body.appendChild(p);
+            return;
+          }
+      
+          const go = new Go();
+          WebAssembly.instantiateStreaming(fetch("o.wasm"), go.importObject).then((result) => {
+            go.run(result.instance);
+          });
+        })
+    </script>
+  </head>
+  
+  <body>
+  </body>
+</html>

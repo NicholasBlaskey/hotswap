@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/nicholasblaskey/hotswap"
+	"github.com/nicholasblaskey/hotswap/hotswap"
 )
 
 func main() {
