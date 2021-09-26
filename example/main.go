@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/nicholasblaskey/hotswap/hotswap"
+	"os/exec"
 )
 
 func main() {
@@ -11,6 +12,8 @@ func main() {
 		// Port
 		8080,
 		// Command to run upon refresh
-		"GOOS=js GOARCH=wasm go build exampleWasm/example.go -o exampleWasm/o.wasm",
+		exec.Command("cat", "hello", " > out.txt"),
+		//exec.Command("go",
+		//	"GOOS=js GOARCH=wasm build ./exampleWasm/example.go", "-o ./exampleWasm/o.wasm"),
 	)
 }

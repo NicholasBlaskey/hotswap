@@ -5,13 +5,20 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os/exec"
 )
 
-func Serve(directory string, port int, cmd string) {
+func Serve(directory string, port int, cmd *exec.Cmd) {
 	log.Printf("Starting server the directory %s port=%d\n", directory, port)
 
 	http.HandleFunc("/compile", func(w http.ResponseWriter, _ *http.Request) {
-		io.WriteString(w, "Hello from a HandleFunc #2!\n")
+		log.Printf("Executing the command: %s\n", cmd)
+		err := cmd.Run()
+		if err != nil {
+			log.Print(err)
+		}
+
+		io.WriteString(w, "")
 	})
 
 	http.Handle("/",
