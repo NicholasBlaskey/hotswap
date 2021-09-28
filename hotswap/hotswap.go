@@ -12,8 +12,10 @@ func Serve(directory string, port int, cmd *exec.Cmd) {
 	log.Printf("Starting server the directory %s port=%d\n", directory, port)
 
 	http.HandleFunc("/compile", func(w http.ResponseWriter, _ *http.Request) {
-		log.Printf("Executing the command: %s\n", cmd)
-		err := cmd.Run()
+		log.Printf("Executing the command: %s\n", cmd.String())
+		out, err := cmd.CombinedOutput()
+
+		log.Println(string(out))
 		if err != nil {
 			log.Print(err)
 		}
