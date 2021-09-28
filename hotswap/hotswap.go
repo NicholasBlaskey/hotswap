@@ -9,18 +9,22 @@ import (
 )
 
 func Serve(directory string, port int, cmd *exec.Cmd) {
-	log.Printf("Starting server the directory %s port=%d\n", directory, port)
+	log.Printf("Starting server the directory %s port=%d\n\n", directory, port)
 
 	http.HandleFunc("/compile", func(w http.ResponseWriter, _ *http.Request) {
-		log.Printf("Executing the command: %s\n", cmd.String())
-		out, err := cmd.CombinedOutput()
+		// Copy command
+		cmdCopy := *cmd
 
-		log.Println(string(out))
+		log.Printf("Executing the command: %s\n", cmdCopy.String())
+		out, err := cmdCopy.CombinedOutput()
+
+		log.Printf("Output of command: %s\n", string(out))
 		if err != nil {
 			log.Print(err)
 		}
+		fmt.Println()
 
-		io.WriteString(w, "")
+		io.WriteString(w, string(out))
 	})
 
 	http.Handle("/",
@@ -32,21 +36,3 @@ func Serve(directory string, port int, cmd *exec.Cmd) {
 		panic(err)
 	}
 }
-
-/*
-	flag.Parse()
-	log.Printf("listening on %q...", *listen)
-	err := http.ListenAndServe(*listen, http.FileServer(http.Dir(*dir)))
-	log.Fatalln(err)
-*/
-
-/*
-	hotswap.Serve(
-		// Directory to server
-		"./exampleWasm",
-		// Port
-		8080,
-		// Command to run upon refresh
-		"GOOS=js GOARCH=wasm go build exampleWasm/example.go -o exampleWasm/o.wasm",
-	)
-*/
